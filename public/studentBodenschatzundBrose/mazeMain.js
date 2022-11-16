@@ -1,4 +1,4 @@
 window.onload=()=>{
-    alert("hi");
+    alert("MOOOOOoIIIIiin");
 
 }
