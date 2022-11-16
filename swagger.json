@@ -1,0 +1,329 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.0.3",
+    "title": "laby",
+    "description": "API description for the labyrinth sample application for Web Engineering 1 in Stralsund"
+  },
+  "schemes": [
+    "http"
+  ],
+  "host": "localhost:3000",
+  "basePath": "/api",
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/person": {
+      "get": {
+        "description": "get infos about player",
+        "parameters": [
+          {
+            "name": "callback",
+            "in": "query",
+            "description": "optional - response will use the callback with given name and deliver a jsonp",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/personfull"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "move user to another position through a door",
+        "parameters": [
+          {
+            "name": "go",
+            "in": "query",
+            "description": "direction as n/s/w/e",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/position"
+            }
+          },
+          "422": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/errorWithPosition"
+            }
+          }
+        }
+      }
+    },
+    "/person/thing": {
+      "post": {
+        "description": "take a thing from current position",
+        "parameters": [
+          {
+            "name": "thing",
+            "description": "the thing to take",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/thing"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/thing"
+            }
+          },
+          "422": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/position": {
+      "get": {
+        "description": "returns current `Position` object of player...",
+        "parameters": [
+          {
+            "name": "callback",
+            "in": "query",
+            "description": "optional - response will use the callback with given name and deliver a jsonp",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/position"
+            }
+          }
+        }
+      }
+    },
+    "/position/thing": {
+      "post": {
+        "description": "drop a thing from player to current position",
+        "parameters": [
+          {
+            "name": "thing",
+            "description": "the thing to take",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/thing"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/thing"
+            }
+          },
+          "422": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/door/{direction}": {
+      "get": {
+        "description": "get door in this direction nswe",
+        "parameters": [
+          {
+            "name": "direction",
+            "in": "path",
+            "description": "direction nswe",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "callback",
+            "in": "query",
+            "description": "optional - response will use the callback with given name and deliver a jsonp",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/door"
+            }
+          },
+          "422": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "description": "change status of door in this direction nswe",
+        "parameters": [
+          {
+            "name": "direction",
+            "in": "path",
+            "description": "direction nswe",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "action",
+            "in": "body",
+            "description": "What to do. Possible actions are open|close|lock|unlock. You need a key only for lock/unlock",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/doorAction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "schema": {
+              "$ref": "#/definitions/door"
+            }
+          },
+          "422": {
+            "description": "error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "personfull": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "things": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/thing"
+          }
+        }
+      }
+    },
+    "person": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "thing": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "position": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "directions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "persons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/person"
+          }
+        },
+        "things": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/thing"
+          }
+        }
+      }
+    },
+    "door": {
+      "type": "object",
+      "properties": {
+        "closable": {
+          "type": "boolean"
+        },
+        "open": {
+          "type": "boolean"
+        },
+        "locked": {
+          "type": "boolean"
+        }
+      }
+    },
+    "doorAction": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      }
+    },
+    "errorWithPosition": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/definitions/position"
+        }
+      }
+    }
+  }
+}
