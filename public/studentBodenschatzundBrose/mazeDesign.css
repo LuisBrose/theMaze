@@ -13,6 +13,9 @@ body{
 }
 
 #room{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
     -webkit-box-shadow: 0 0 30px black inset;
     height: 600px;
     width: 800px;
@@ -32,7 +35,6 @@ body{
 #nroom{
     position: absolute;
     top: 7%;
-    justify-content: center;
     height: 80px;
     width: 800px;
     background-image: linear-gradient(to top,darkgreen 0%,black 90%);
@@ -42,7 +44,6 @@ body{
 #sroom{
     position: absolute;
     bottom: 7%;
-    justify-content: center;
     height: 80px;
     width: 800px;
     background-image: linear-gradient(to bottom,darkgreen 0%,black 90%);
@@ -67,4 +68,40 @@ body{
     width: 80px;
     background-image: linear-gradient(to right,darkgreen 0%,black 90%);
     -webkit-box-shadow:10px 0 40px 30px black;
+}
+
+#ndoor{
+    justify-self: center;
+    align-self: center;
+    position: relative;
+    background: saddlebrown;
+    height: 30px;
+    width: 250px;
+}
+
+#wdoor{
+    justify-self: center;
+    align-self: baseline;
+    position: relative;
+    background: saddlebrown;
+    height: 250px;
+    width: 30px;
+}
+
+#edoor{
+    justify-self: center;
+    align-self: end;
+    position: relative;
+    background: saddlebrown;
+    height: 250px;
+    width: 30px;
+}
+
+#sdoor{
+    justify-self: center;
+    align-self: center;
+    position: relative;
+    background: saddlebrown;
+    height: 30px;
+    width: 250px;
 }
