@@ -1,4 +1,70 @@
 body{
-    background: green;
+    font-size: 50px;
+    background: darkslategray;
+    overflow: hidden;
+    -webkit-box-shadow: 0 0 50px black inset;
+}
 
+#container{
+    height: 98vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#room{
+    -webkit-box-shadow: 0 0 30px black inset;
+    height: 600px;
+    width: 800px;
+    background: lawngreen;
+}
+
+#map{
+    position: absolute;
+    bottom: 2%;
+    right: 1%;
+    -webkit-box-shadow: 0 0 30px black inset;
+    height: 300px;
+    width: 300px;
+    background: darkolivegreen;
+}
+
+#nroom{
+    position: absolute;
+    top: 7%;
+    justify-content: center;
+    height: 80px;
+    width: 800px;
+    background-image: linear-gradient(to top,darkgreen 0%,black 90%);
+    -webkit-box-shadow: 0 -10px 40px 30px black;
+}
+
+#sroom{
+    position: absolute;
+    bottom: 7%;
+    justify-content: center;
+    height: 80px;
+    width: 800px;
+    background-image: linear-gradient(to bottom,darkgreen 0%,black 90%);
+    -webkit-box-shadow: 0 10px 40px 30px black;
+}
+
+#wroom{
+    position: absolute;
+    left:24%;
+    justify-content: center;
+    height: 600px;
+    width: 80px;
+    background-image: linear-gradient(to left,darkgreen 0%,black 90%);
+    -webkit-box-shadow:-10px 0 40px 30px black;
+}
+
+#eroom{
+    position: absolute;
+    right:24%;
+    justify-content: center;
+    height: 600px;
+    width: 80px;
+    background-image: linear-gradient(to right,darkgreen 0%,black 90%);
+    -webkit-box-shadow:10px 0 40px 30px black;
 }
