@@ -3,6 +3,7 @@ body{
     background: darkslategray;
     overflow: hidden;
     -webkit-box-shadow: 0 0 50px black inset;
+    color: #0e2327;
 }
 
 #container{
@@ -58,6 +59,7 @@ body{
     height: 450px;
     width: 400px;
     background: darkslategray;
+    text-align: center;
 }
 
 #nroom{

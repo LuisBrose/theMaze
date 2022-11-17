@@ -1,4 +1,6 @@
-window.onload=async ()=>{
+window.onload=async()=>{
+    let personData = await(await fetch("/api/person")).json();
+    document.getElementById("menu").innerHTML = 'User: '+personData.name;
 }
 //http://localhost:3000/studentBodenschatzundBrose/theMaze.html
 class personfull{name;things}
