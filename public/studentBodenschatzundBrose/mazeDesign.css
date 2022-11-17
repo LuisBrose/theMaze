@@ -13,9 +13,7 @@ body{
 }
 
 #room{
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
+    position: relative;
     -webkit-box-shadow: 0 0 30px black inset;
     height: 600px;
     width: 800px;
@@ -27,12 +25,43 @@ body{
     bottom: 2%;
     right: 1%;
     -webkit-box-shadow: 0 0 30px black inset;
-    height: 300px;
-    width: 300px;
+    height: 400px;
+    width: 400px;
     background: darkolivegreen;
 }
 
+#inv{
+    position: absolute;
+    top: 2%;
+    right: 1%;
+    -webkit-box-shadow: 0 0 30px black inset;
+    height: 450px;
+    width: 400px;
+    background: darkorange;
+}
+
+#console{
+    position: absolute;
+    bottom: 2%;
+    left: 1%;
+    -webkit-box-shadow: 0 0 30px black inset;
+    height: 400px;
+    width: 400px;
+    background: darkslategray;
+}
+
+#menu{
+    position: absolute;
+    top: 2%;
+    left: 1%;
+    -webkit-box-shadow: 0 0 30px black inset;
+    height: 450px;
+    width: 400px;
+    background: darkslategray;
+}
+
 #nroom{
+    z-index: 3;
     position: absolute;
     top: 7%;
     height: 80px;
@@ -42,6 +71,7 @@ body{
 }
 
 #sroom{
+    z-index: 3;
     position: absolute;
     bottom: 7%;
     height: 80px;
@@ -51,6 +81,7 @@ body{
 }
 
 #wroom{
+    z-index: 3;
     position: absolute;
     left:24%;
     justify-content: center;
@@ -61,6 +92,7 @@ body{
 }
 
 #eroom{
+    z-index: 3;
     position: absolute;
     right:24%;
     justify-content: center;
@@ -71,37 +103,41 @@ body{
 }
 
 #ndoor{
-    justify-self: center;
-    align-self: center;
-    position: relative;
-    background: saddlebrown;
-    height: 30px;
-    width: 250px;
+    z-index: 2;
+    position: absolute;
+    left: 35%;
+    top: -4%;
+    background: chocolate;
+    height: 50px;
+    width: 200px;
 }
 
 #wdoor{
-    justify-self: center;
-    align-self: baseline;
-    position: relative;
-    background: saddlebrown;
-    height: 250px;
-    width: 30px;
+    z-index: 2;
+    position: absolute;
+    background: chocolate;
+    top:33%;
+    left:-3%;
+    height: 200px;
+    width: 50px;
 }
 
 #edoor{
-    justify-self: center;
-    align-self: end;
-    position: relative;
-    background: saddlebrown;
-    height: 250px;
-    width: 30px;
+    z-index: 2;
+    position: absolute;
+    top: 33%;
+    right: -3%;
+    background: chocolate;
+    height: 200px;
+    width: 50px;
 }
 
 #sdoor{
-    justify-self: center;
-    align-self: center;
-    position: relative;
-    background: saddlebrown;
-    height: 30px;
-    width: 250px;
+    z-index: 2;
+    position: absolute;
+    left: 35%;
+    bottom: -4%;
+    background: chocolate;
+    height: 50px;
+    width: 200px;
 }
