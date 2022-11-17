@@ -110,6 +110,7 @@ body{
     background: chocolate;
     height: 50px;
     width: 200px;
+    -webkit-box-shadow:0 60px 160px 70px bisque;
 }
 
 #wdoor{
@@ -118,8 +119,9 @@ body{
     background: chocolate;
     top:33%;
     left:-3%;
-    height: 200px;
+    height: 180px;
     width: 50px;
+    -webkit-box-shadow:60px 0 160px 70px bisque;
 }
 
 #edoor{
@@ -128,8 +130,9 @@ body{
     top: 33%;
     right: -3%;
     background: chocolate;
-    height: 200px;
+    height: 180px;
     width: 50px;
+    -webkit-box-shadow:-60px 0 160px 70px bisque;
 }
 
 #sdoor{
@@ -140,4 +143,5 @@ body{
     background: chocolate;
     height: 50px;
     width: 200px;
+    -webkit-box-shadow:0px -60px 160px 70px bisque;
 }
