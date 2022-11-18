@@ -68,7 +68,7 @@ body{
     top: 7%;
     height: 80px;
     width: 800px;
-    background-image: linear-gradient(to top,darkgreen 0%,black 90%);
+    background-image: linear-gradient(to top,saddlebrown 0%,black 90%);
     -webkit-box-shadow: 0 -10px 40px 30px black;
 }
 
@@ -78,7 +78,7 @@ body{
     bottom: 7%;
     height: 80px;
     width: 800px;
-    background-image: linear-gradient(to bottom,darkgreen 0%,black 90%);
+    background-image: linear-gradient(to bottom,saddlebrown 0%,black 90%);
     -webkit-box-shadow: 0 10px 40px 30px black;
 }
 
@@ -89,7 +89,7 @@ body{
     justify-content: center;
     height: 600px;
     width: 80px;
-    background-image: linear-gradient(to left,darkgreen 0%,black 90%);
+    background-image: linear-gradient(to left,saddlebrown 0%,black 90%);
     -webkit-box-shadow:-10px 0 40px 30px black;
 }
 
@@ -100,12 +100,12 @@ body{
     justify-content: center;
     height: 600px;
     width: 80px;
-    background-image: linear-gradient(to right,darkgreen 0%,black 90%);
+    background-image: linear-gradient(to right,saddlebrown 0%,black 90%);
     -webkit-box-shadow:10px 0 40px 30px black;
 }
 
 #ndoor{
-    z-index: 2;
+    z-index: 100;
     position: absolute;
     left: 35%;
     top: -4%;
@@ -116,7 +116,7 @@ body{
 }
 
 #wdoor{
-    z-index: 2;
+    z-index: 100;
     position: absolute;
     background: chocolate;
     top:33%;
@@ -127,7 +127,7 @@ body{
 }
 
 #edoor{
-    z-index: 2;
+    z-index: 100;
     position: absolute;
     top: 33%;
     right: -3%;
@@ -138,7 +138,7 @@ body{
 }
 
 #sdoor{
-    z-index: 2;
+    z-index: 100;
     position: absolute;
     left: 35%;
     bottom: -4%;
@@ -159,9 +159,36 @@ body{
     font-size: 30px;
     color: blue;
     position: absolute;
-    width: 100px;
-    height: 100px;
-    background: aqua;
-    border: aqua solid 5px;
-    border-radius: 20px;
+    width: 95px;
+    height: 70px;
+}
+
+.doorNImg{
+    position: absolute;
+    left: 25%;
+    top: -150%;
+    width: 90px;
+    height: 150px;
+}
+
+.doorWImg{
+    position: absolute;
+    left: 25%;
+    width: 50px;
+    height: 170px;
+}
+
+.doorEImg{
+    position: absolute;
+    right: 25%;
+    width: 50px;
+    height: 170px;
+}
+
+.doorSImg{
+    position: absolute;
+    bottom: -50%;
+    left: 25%;
+    width: 90px;
+    height: 150px;
 }
