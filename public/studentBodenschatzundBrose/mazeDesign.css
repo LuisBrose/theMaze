@@ -147,3 +147,21 @@ body{
     width: 200px;
     -webkit-box-shadow:0px -60px 120px 30px bisque;
 }
+
+.invitem{
+    background: chocolate;
+    margin: 10px 20px;
+    width: 360px;
+    height: 78px;
+}
+
+.item{
+    font-size: 30px;
+    color: blue;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: aqua;
+    border: aqua solid 5px;
+    border-radius: 20px;
+}

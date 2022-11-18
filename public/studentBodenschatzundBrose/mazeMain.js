@@ -8,7 +8,7 @@ window.onload=async()=>{
     document.getElementById("edoor").onclick=()=>goToNextRoom('e');
     document.getElementById("sdoor").onclick=()=>goToNextRoom('s');
 
-    updateRoom();
+    await updateRoom();
 }
 //http://localhost:3000/studentBodenschatzundBrose/theMaze.html
 
@@ -22,7 +22,25 @@ async function updateRoom(){
         displayDoor(true,roomInfo.directions[door]+"door");
     }
 
-    setTimeout(updateRoom,1000);
+    const list = document.getElementById("itemList").childNodes;
+
+    for (let i = 0; i < list.length; i++) {
+        let item = list.item(i).textContent
+        let contains;
+
+        for (const thing in roomInfo.things) {
+            if(contains)break;
+            contains = (item == roomInfo.things[thing].name);
+        }
+
+        if(!contains)list.item(i).remove();
+    }
+
+    for (const thing in roomInfo.things) {
+        diplayItem(roomInfo.things[thing]);
+    }
+
+    setTimeout(await updateRoom,100);
 }
 
 function displayAllDoors(show){
@@ -39,6 +57,26 @@ function displayDoor(show,id){
     let elem = document.getElementById(id);
     if (show) elem.hidden = false;
     else elem.hidden = true;
+}
+
+function getRandomValue(min,max){
+    let random=min+Math.floor(Math.random()*(max-min));
+    return random;
+}
+
+function diplayItem(item){
+    if (document.getElementById(item.name.toString()))return;
+    let element = document.createElement("div");
+
+    element.id=item.name.toString();
+    element.classList.add("item");
+    element.innerHTML = item.name.toString();
+    element.style.left = getRandomValue(5,85)+'%';
+    element.style.top = getRandomValue(5,80)+'%';
+
+    //element.onclick =()=>{element.hidden = true};
+
+    document.getElementById("itemList").appendChild(element);
 }
 
 async function displayInventory(items){
