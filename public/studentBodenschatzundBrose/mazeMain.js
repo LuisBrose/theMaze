@@ -23,6 +23,7 @@ async function updateRoom(){
     }
 
     const list = document.getElementById("itemList").childNodes;
+    if(roomInfo.things == [])document.getElementById("itemList").innerText = '';
 
     for (let i = 0; i < list.length; i++) {
         let item = list.item(i).textContent
