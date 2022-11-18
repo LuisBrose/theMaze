@@ -80,20 +80,22 @@ function displayItem(item){
     element.style.left = getRandomValue(5,85)+'%';
     element.style.top = getRandomValue(5,80)+'%';
 
-    element.src = "/studentBodenschatzundBrose/icons/kiste_v1.png";
     switch (item.name){
         case "Ring":
             element.src = "/studentBodenschatzundBrose/icons/ring_gold-rot.png";
             break;
         case "Schlüssel":
             let random = getRandomValue(1,4);
-            element.src = "";
+            element.src = "/studentBodenschatzundBrose/icons/schlüssel"+random+".png";
             break;
         case "Krone":
-            element.src = "";
+            element.src = "/studentBodenschatzundBrose/icons/krone_gold.png";
             break;
         case "Blume":
-            element.src = "";
+            element.src = "/studentBodenschatzundBrose/icons/blume_lila.png";
+            break;
+        default:
+            element.src = "/studentBodenschatzundBrose/icons/kiste_v1.png";
             break;
     }
 

@@ -109,7 +109,6 @@ body{
     position: absolute;
     left: 35%;
     top: -4%;
-    background: chocolate;
     height: 50px;
     width: 200px;
     -webkit-box-shadow:0 60px 120px 30px bisque;
@@ -118,7 +117,6 @@ body{
 #wdoor{
     z-index: 100;
     position: absolute;
-    background: chocolate;
     top:33%;
     left:-3%;
     height: 180px;
@@ -131,7 +129,6 @@ body{
     position: absolute;
     top: 33%;
     right: -3%;
-    background: chocolate;
     height: 180px;
     width: 50px;
     -webkit-box-shadow:-60px 0 120px 30px bisque;
@@ -142,7 +139,6 @@ body{
     position: absolute;
     left: 35%;
     bottom: -4%;
-    background: chocolate;
     height: 50px;
     width: 200px;
     -webkit-box-shadow:0px -60px 120px 30px bisque;
