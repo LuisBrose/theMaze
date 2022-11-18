@@ -23,7 +23,12 @@ async function updateRoom(){
     }
 
     const list = document.getElementById("itemList").childNodes;
-    if(roomInfo.things == [])document.getElementById("itemList").innerText = '';
+
+    let itemList = document.getElementById("itemList");
+
+    if(roomInfo.things.toString() === ""){
+       itemList.innerText = "";
+    }
 
     for (let i = 0; i < list.length; i++) {
         let item = list.item(i).textContent
@@ -38,7 +43,7 @@ async function updateRoom(){
     }
 
     for (const thing in roomInfo.things) {
-        diplayItem(roomInfo.things[thing]);
+        displayItem(roomInfo.things[thing]);
     }
 
     setTimeout(await updateRoom,100);
@@ -65,15 +70,32 @@ function getRandomValue(min,max){
     return random;
 }
 
-function diplayItem(item){
+function displayItem(item){
     if (document.getElementById(item.name.toString()))return;
-    let element = document.createElement("div");
+    let element = document.createElement("img");
 
     element.id=item.name.toString();
     element.classList.add("item");
     element.innerHTML = item.name.toString();
     element.style.left = getRandomValue(5,85)+'%';
     element.style.top = getRandomValue(5,80)+'%';
+
+    element.src = "/studentBodenschatzundBrose/icons/kiste_v1.png";
+    switch (item.name){
+        case "Ring":
+            element.src = "/studentBodenschatzundBrose/icons/ring_gold-rot.png";
+            break;
+        case "Schlüssel":
+            let random = getRandomValue(1,4);
+            element.src = "";
+            break;
+        case "Krone":
+            element.src = "";
+            break;
+        case "Blume":
+            element.src = "";
+            break;
+    }
 
     //element.onclick =()=>{element.hidden = true};
 
@@ -144,4 +166,8 @@ async function changeItemState(take,name){ //take -> true=take false=drop
         });
 
     let result = await response.json();
+}
+
+async function takeItem(){
+
 }
