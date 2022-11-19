@@ -1,3 +1,12 @@
+@font-face {
+    font-family: 'alagardmedium';
+    src: url('alagard-webfont.woff2') format('woff2'),
+    url('alagard-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 body{
     font-size: 50px;
     background: darkslategray;
