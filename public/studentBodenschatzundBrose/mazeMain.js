@@ -72,7 +72,7 @@ async function updateRoom(){
 
         for (const thing in roomInfo.things) {
             if(contains)break;
-            contains = (item == roomInfo.things[thing].name);
+            contains = (item === roomInfo.things[thing].name);
         }
 
         if(!contains)list.item(i).remove();
