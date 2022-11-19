@@ -1,18 +1,18 @@
 @font-face {
     font-family: 'alagardmedium';
-    src: url('alagard-webfont.woff2') format('woff2'),
-    url('alagard-webfont.woff') format('woff');
+    src: url('fonts/alagard/alagard-webfont.woff2') format('woff2'),
+    url('fonts/alagard/alagard-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
-
 }
 
 body{
+    font-family: 'alagardmedium';
     font-size: 50px;
     background: darkslategray;
     overflow: hidden;
     -webkit-box-shadow: 0 0 50px black inset;
-    color: #0e2327;
+    color: ghostwhite;
 }
 
 #container{
@@ -67,6 +67,8 @@ body{
 }
 
 #menu{
+    line-height: 40px;
+    font-family: 'alagardmedium';
     position: absolute;
     top: 2%;
     left: 1%;
@@ -213,7 +215,7 @@ body{
 }
 
 #nmenu{
-    width: 215px;
+    width: 220px;
     height: 100px;
     z-index: 6;
     position: absolute;
@@ -252,7 +254,7 @@ body{
 }
 
 #smenu{
-    width: 215px;
+    width: 220px;
     height: 100px;
     z-index: 6;
     position: absolute;

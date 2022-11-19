@@ -170,6 +170,7 @@ async function displayInventory(items){
             if(itemField.innerText===items[item].name)break;
             if (itemField.innerText === ''){
                 itemField.innerText = items[item].name;
+                itemField.style.lineHeight = '80px';
 
                 let elem = document.createElement("img");
                 elem.src = getIconByName(items[item].name);
