@@ -22,12 +22,13 @@ body{
 }
 
 #map{
+    z-index: 6;
     display: flex;
     flex-wrap: wrap;
     position: absolute;
     bottom: 2%;
     right: 1%;
-    -webkit-box-shadow: -10px -10px 40px whitesmoke;
+    -webkit-box-shadow: 0px 0px 60px darkolivegreen;
     height: 427px;
     width: 427px;
 }
@@ -201,3 +202,56 @@ body{
     width: 7px;
     height: 7px;
 }
+
+#nmenu{
+    width: 215px;
+    height: 100px;
+    z-index: 6;
+    position: absolute;
+    left:60%;
+    top: -20%;
+    background: darkslategray;
+    border:darkslategray solid 1px;
+    border-radius: 30px;
+    padding: -10px;
+}
+
+#wmenu{
+    width: 100px;
+    height: 215px;
+    z-index: 6;
+    position: absolute;
+    left: -15%;
+    top: 65%;
+    background: darkslategray;
+    border:darkslategray solid 1px;
+    border-radius: 30px;
+    padding: -10px;
+}
+
+#emenu{
+    width: 100px;
+    height: 215px;
+    z-index: 6;
+    position: absolute;
+    right: -15%;
+    top: 65%;
+    background: darkslategray;
+    border:darkslategray solid 1px;
+    border-radius: 30px;
+    padding: 0px;
+}
+
+#smenu{
+    width: 215px;
+    height: 100px;
+    z-index: 6;
+    position: absolute;
+    bottom: -20%;
+    left: 60%;
+    background: darkslategray;
+    border:darkslategray solid 1px;
+    border-radius: 30px;
+    padding: -10px;
+}
+

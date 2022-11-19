@@ -1,8 +1,8 @@
 "use strict";
 
-window.onload=async()=>{
-    let x=30,y=30;
+let xy = [30,30];
 
+window.onload=async()=>{
     initMap();
     let personData = await(await fetch("/api/person")).json();
 
@@ -15,38 +15,40 @@ window.onload=async()=>{
 
     await displayInventory(personData.things);
 
-    document.getElementById("ndoor").onclick=async ()=>{
-        if(await goToNextRoom('n')){
-            setMapPart(x,y,false);
-            x--;
-            setMapPart(x,y,true);
-        }
-    }
-    document.getElementById("wdoor").onclick=async ()=>{
-        if(await goToNextRoom('w')){
-            setMapPart(x,y,false);
-            y--;
-            setMapPart(x,y,true);
-        }
-    }
-    document.getElementById("edoor").onclick=async ()=>{
-        if(await goToNextRoom('e')){
-            setMapPart(x,y,false);
-            y++;
-            setMapPart(x,y,true);
-        }
-    }
-    document.getElementById("sdoor").onclick=async ()=>{
-        if(await goToNextRoom('s')){
-            setMapPart(x,y,false);
-            x++;
-            setMapPart(x,y,true);
-        }
+    const directions = ['n','w','e','s'];
+
+    for (const direction in directions) {
+        let dir = directions[direction]
+        document.getElementById(dir+"door").onclick=()=>doorOnClick(dir);
+        document.getElementById(dir+"lock").onclick=()=>changeDoorState(dir,"unlock","Schlüssel");
+        document.getElementById(dir+"dooricon").onclick=()=>changeDoorState(dir,"open","");
     }
 
     await updateRoom();
 }
 //http://localhost:3000/studentBodenschatzundBrose/theMaze.html
+
+async function doorOnClick(direction){
+    let x = xy[0];
+    let y = xy[1];
+
+    if(await goToNextRoom(direction)){
+        setMapPart(x,y,false);
+        switch (direction){
+            case 'n': x--;
+                break;
+            case 'w': y--;
+                break;
+            case 'e': y++;
+                break;
+            case 's': x++;
+                break;
+        }
+        setMapPart(x,y,true);
+    }
+
+    xy = [x,y];
+}
 
 async function updateRoom(){
     let roomInfo = await getRoomInfo();
@@ -55,7 +57,7 @@ async function updateRoom(){
 
     displayAllDoors(false);
     for (const door in roomInfo.directions) {
-        displayDoor(true,roomInfo.directions[door]+"door");
+        displayDoor(true,roomInfo.directions[door]);
     }
 
     const list = document.getElementById("itemList").childNodes;
@@ -87,18 +89,33 @@ async function updateRoom(){
 
 function displayAllDoors(show){
     const allDoors = ["ndoor","sdoor","wdoor","edoor"];
+    const allMenus = ["nmenu","smenu","wmenu","emenu"];
 
     for (const door in allDoors) {
         let elem = document.getElementById(allDoors[door]);
         if (show) elem.hidden = false;
         else elem.hidden = true;
     }
+
+    for (const menu in allMenus) {
+        let m = document.getElementById(allMenus[menu]);
+        if (show) m.hidden = false;
+        else m.hidden = true;
+    }
 }
 
 function displayDoor(show,id){
-    let elem = document.getElementById(id);
-    if (show) elem.hidden = false;
-    else elem.hidden = true;
+    let elem = document.getElementById(id+"door");
+    let menu = document.getElementById(id+"menu");
+
+    if (show) {
+        elem.hidden = false;
+        menu.hidden = false;
+    }
+    else {
+        menu.hidden = true;
+        elem.hidden = true;
+    }
 }
 
 function getRandomValue(min,max){
@@ -205,6 +222,7 @@ async function goToNextRoom(direction){
     });
     let result = await response.json();
     if(!response.ok)displayInConsole(result.error);
+    else displayInConsole(result.description);
     return response.ok;
 }
 
