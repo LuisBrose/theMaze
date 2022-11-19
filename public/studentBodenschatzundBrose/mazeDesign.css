@@ -27,10 +27,9 @@ body{
     position: absolute;
     bottom: 2%;
     right: 1%;
-    -webkit-box-shadow: -10px -10px 40px darkolivegreen;
-    height: 366px;
-    width: 366px;
-    background: darkolivegreen;
+    -webkit-box-shadow: -10px -10px 40px whitesmoke;
+    height: 427px;
+    width: 427px;
 }
 
 #inv{
@@ -48,8 +47,8 @@ body{
     bottom: 2%;
     left: 1%;
     -webkit-box-shadow: 0 0 30px black inset;
-    height: 270px;
-    width: 350px;
+    height: 320px;
+    width: 400px;
     background: darkslategray;
     color: red;
     font-size: 26px;
@@ -199,7 +198,6 @@ body{
 }
 
 .mapPart{
-    width: 6px;
-    height: 6px;
-    background: darkolivegreen;
+    width: 7px;
+    height: 7px;
 }

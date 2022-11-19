@@ -253,7 +253,8 @@ function initMap(){
 
     for (let i = 0; i < 61; i++) {
         for (let j = 0; j < 61; j++) {
-            let mapPart = document.createElement("div");
+            let mapPart = document.createElement("img");
+            mapPart.src = "/studentBodenschatzundBrose/icons/minimap/blank.png";
             mapPart.id = "mp"+i+j;
             mapPart.classList.add("mapPart");
             map.appendChild(mapPart);
@@ -265,6 +266,6 @@ function initMap(){
 
 function setMapPart(x,y,current){
     let mapPart = document.getElementById("mp"+x+y);
-    if(current)mapPart.style.background = 'lawngreen';
-    else mapPart.style.background = 'green';
+    if(current)mapPart.src = "/studentBodenschatzundBrose/icons/minimap/current.png";
+    else mapPart.src = "/studentBodenschatzundBrose/icons/minimap/test.png";
 }
