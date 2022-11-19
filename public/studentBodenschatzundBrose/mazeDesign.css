@@ -22,12 +22,14 @@ body{
 }
 
 #map{
+    display: flex;
+    flex-wrap: wrap;
     position: absolute;
     bottom: 2%;
     right: 1%;
-    -webkit-box-shadow: 0 0 30px black inset;
-    height: 400px;
-    width: 400px;
+    -webkit-box-shadow: -10px -10px 40px darkolivegreen;
+    height: 366px;
+    width: 366px;
     background: darkolivegreen;
 }
 
@@ -46,9 +48,13 @@ body{
     bottom: 2%;
     left: 1%;
     -webkit-box-shadow: 0 0 30px black inset;
-    height: 400px;
-    width: 400px;
+    height: 270px;
+    width: 350px;
     background: darkslategray;
+    color: red;
+    font-size: 26px;
+    text-align: center;
+    padding: 50px 10px;
 }
 
 #menu{
@@ -60,6 +66,7 @@ body{
     width: 400px;
     background: darkslategray;
     text-align: center;
+    font-size: 28px;
 }
 
 #nroom{
@@ -94,6 +101,7 @@ body{
 }
 
 #eroom{
+    color: #5e5114;
     z-index: 3;
     position: absolute;
     right:24%;
@@ -105,43 +113,43 @@ body{
 }
 
 #ndoor{
-    z-index: 100;
+    z-index: 4;
     position: absolute;
-    left: 35%;
-    top: -4%;
-    height: 50px;
-    width: 200px;
-    -webkit-box-shadow:0 60px 120px 30px bisque;
+    left: 45%;
+    top: -20%;
+    width: 90px;
+    height: 150px;
+    -webkit-box-shadow:0 120px 120px 20px bisque;
 }
 
 #wdoor{
-    z-index: 100;
+    z-index: 4;
     position: absolute;
-    top:33%;
-    left:-3%;
-    height: 180px;
+    top:40%;
+    left:-5%;
     width: 50px;
-    -webkit-box-shadow:60px 0 120px 30px bisque;
+    height: 120px;
+    -webkit-box-shadow:60px 0 120px 20px bisque;
 }
 
 #edoor{
-    z-index: 100;
+    z-index: 4;
     position: absolute;
-    top: 33%;
-    right: -3%;
-    height: 180px;
+    top: 40%;
+    right: -5%;
     width: 50px;
-    -webkit-box-shadow:-60px 0 120px 30px bisque;
+    height: 120px;
+    -webkit-box-shadow:-60px 0 120px 20px bisque;
 }
 
 #sdoor{
-    z-index: 100;
+    z-index: 4;
     position: absolute;
-    left: 35%;
-    bottom: -4%;
-    height: 50px;
-    width: 200px;
-    -webkit-box-shadow:0px -60px 120px 30px bisque;
+    left: 45%;
+    bottom: -20%;
+    width: 90px;
+    height: 150px;
+    -webkit-box-shadow:0px -120px 120px 20px bisque;
 }
 
 .invitem{
@@ -155,36 +163,43 @@ body{
     font-size: 30px;
     color: blue;
     position: absolute;
-    width: 95px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
 }
 
-.doorNImg{
+#doorNImg{
     position: absolute;
-    left: 25%;
-    top: -150%;
     width: 90px;
     height: 150px;
 }
 
-.doorWImg{
+#doorWImg{
+    top: -20%;
     position: absolute;
-    left: 25%;
     width: 50px;
     height: 170px;
 }
 
-.doorEImg{
+#doorEImg{
+    top: -20%;
     position: absolute;
-    right: 25%;
     width: 50px;
     height: 170px;
 }
 
-.doorSImg{
+#doorSImg{
     position: absolute;
-    bottom: -50%;
-    left: 25%;
     width: 90px;
     height: 150px;
+}
+
+.x{
+    position: absolute;
+    right:0%;
+}
+
+.mapPart{
+    width: 6px;
+    height: 6px;
+    background: darkolivegreen;
 }
