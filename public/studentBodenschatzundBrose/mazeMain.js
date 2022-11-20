@@ -5,15 +5,15 @@ let xy = [30,30];
 window.onload=async()=>{
     document.getElementById('message').hidden = true;
 
+    document.getElementById("map").onclick =()=> showMap(true);
+
     await initMap();
     let personData = await(await fetch("/api/person")).json();
     displayAllDoors(false);
 
     document.getElementById("menu").innerHTML = (
-        'Welcome '+personData.name+"<br><br>"+"How to Play?<br>"+
-            "door: enter the next room<br>"+
-            "lock: unlock door (find a key first)<br>"+
-            "Find the Treasure to win<br><br>Good Luck Adventurer"
+        'Welcome '+personData.name+"<br>"+
+            "Find the Treasure to win<br>Good Luck Adventurer"
     );
 
     await displayInventory(personData.things);
@@ -266,8 +266,8 @@ function displayInConsole(message){
 
     let lines = con.innerText.split("\n");
 
-    if(lines.length===12){
-        let cut = lines[9].length+1;
+    if(lines.length===10){
+        let cut = lines[7].length+1;
         con.innerText = con.innerText.substring(0,con.innerText.length-cut);
     }
 }
@@ -338,5 +338,18 @@ async function setIconState(direction){
     else {
         lock.onclick=()=>changeDoorState(direction,"unlock","Schlüssel");
         lock.src = "/studentBodenschatzundBrose/icons/lock_closed.png"
+    }
+}
+
+function showMap(show){
+    let map = document.getElementById("map");
+
+    if(show){
+        map.onclick =()=> showMap(false);
+        map.style.transform = 'scale(200%) translate(-84%,-27%)';
+    }
+    else{
+        map.onclick =()=> showMap(true);
+        map.style.transform = 'scale(100%) translate(0%,0%)';
     }
 }

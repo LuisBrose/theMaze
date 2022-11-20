@@ -391,14 +391,23 @@ exports.createModel = function(users) {
     const vorraum = new exports.Position("Einfacher Raum", "LightGrey", "Ein karger Raum");
     const schatzkammer = new exports.Position("Schatzkammer", "Gold", "Schätze ohne Ende. Wir sind reich!");
     const thronraum = new exports.Position("Thronraum", "Purple", "Ein prächtig ausgestatter Raum mit einem großen Thron");
+    const thronraum2 = new exports.Position("Thronraum", "Purple", "Ein prächtig ausgestatter Raum mit einem großen Thron");
+
     firstPosition = garten1;
 
     const key = new exports.Thing("Schlüssel");
 
-    new exports.Door(garten1, "e", garten2, false);
+    new exports.Door(garten2, "e",garten1, false);
     new exports.Door(garten1, "n", vorraum);
     new exports.Door(vorraum, "e", schatzkammer, true, false, true, [key]);
     new exports.Door(vorraum, "n", thronraum);
+
+    /*
+    new exports.Door(thronraum2, "n", thronraum2);
+    new exports.Door(thronraum2, "e", thronraum2);
+    new exports.Door(thronraum2, "s", thronraum2);
+    new exports.Door(thronraum2, "w", thronraum2);
+     */
 
     garten1.things.push(new exports.Thing("Blume"));
     vorraum.things.push(key);
