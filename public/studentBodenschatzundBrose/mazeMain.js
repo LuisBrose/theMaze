@@ -1,16 +1,54 @@
+"use strict";
+
+let xy = [30,30];
+
 window.onload=async()=>{
+    initMap();
     let personData = await(await fetch("/api/person")).json();
-    document.getElementById("menu").innerHTML = 'User: '+personData.name;
+
+    document.getElementById("menu").innerHTML = (
+        'Welcome '+personData.name+"<br><br>"+"How to Play?<br>"+
+            "door: enter the next room<br>"+
+            "lock: unlock door (find a key first)<br>"+
+            "Find the Treasure to win<br><br>Good Luck Adventurer"
+    );
+
     await displayInventory(personData.things);
 
-    document.getElementById("ndoor").onclick=()=>goToNextRoom('n');
-    document.getElementById("wdoor").onclick=()=>goToNextRoom('w');
-    document.getElementById("edoor").onclick=()=>goToNextRoom('e');
-    document.getElementById("sdoor").onclick=()=>goToNextRoom('s');
+    const directions = ['n','w','e','s'];
+
+    for (const direction in directions) {
+        let dir = directions[direction]
+        document.getElementById(dir+"door").onclick=()=>doorOnClick(dir);
+        document.getElementById(dir+"lock").onclick=()=>changeDoorState(dir,"unlock","Schlüssel");
+        document.getElementById(dir+"dooricon").onclick=()=>changeDoorState(dir,"open","");
+    }
 
     await updateRoom();
 }
 //http://localhost:3000/studentBodenschatzundBrose/theMaze.html
+
+async function doorOnClick(direction){
+    let x = xy[0];
+    let y = xy[1];
+
+    if(await goToNextRoom(direction)){
+        setMapPart(x,y,false);
+        switch (direction){
+            case 'n': x--;
+                break;
+            case 'w': y--;
+                break;
+            case 'e': y++;
+                break;
+            case 's': x++;
+                break;
+        }
+        setMapPart(x,y,true);
+    }
+
+    xy = [x,y];
+}
 
 async function updateRoom(){
     let roomInfo = await getRoomInfo();
@@ -19,7 +57,7 @@ async function updateRoom(){
 
     displayAllDoors(false);
     for (const door in roomInfo.directions) {
-        displayDoor(true,roomInfo.directions[door]+"door");
+        displayDoor(true,roomInfo.directions[door]);
     }
 
     const list = document.getElementById("itemList").childNodes;
@@ -36,7 +74,7 @@ async function updateRoom(){
 
         for (const thing in roomInfo.things) {
             if(contains)break;
-            contains = (item == roomInfo.things[thing].name);
+            contains = (item === roomInfo.things[thing].name);
         }
 
         if(!contains)list.item(i).remove();
@@ -51,18 +89,33 @@ async function updateRoom(){
 
 function displayAllDoors(show){
     const allDoors = ["ndoor","sdoor","wdoor","edoor"];
+    const allMenus = ["nmenu","smenu","wmenu","emenu"];
 
     for (const door in allDoors) {
         let elem = document.getElementById(allDoors[door]);
         if (show) elem.hidden = false;
         else elem.hidden = true;
     }
+
+    for (const menu in allMenus) {
+        let m = document.getElementById(allMenus[menu]);
+        if (show) m.hidden = false;
+        else m.hidden = true;
+    }
 }
 
 function displayDoor(show,id){
-    let elem = document.getElementById(id);
-    if (show) elem.hidden = false;
-    else elem.hidden = true;
+    let elem = document.getElementById(id+"door");
+    let menu = document.getElementById(id+"menu");
+
+    if (show) {
+        elem.hidden = false;
+        menu.hidden = false;
+    }
+    else {
+        menu.hidden = true;
+        elem.hidden = true;
+    }
 }
 
 function getRandomValue(min,max){
@@ -80,40 +133,69 @@ function displayItem(item){
     element.style.left = getRandomValue(5,85)+'%';
     element.style.top = getRandomValue(5,80)+'%';
 
-    element.src = "/studentBodenschatzundBrose/icons/kiste_v1.png";
-    switch (item.name){
-        case "Ring":
-            element.src = "/studentBodenschatzundBrose/icons/ring_gold-rot.png";
-            break;
-        case "Schlüssel":
-            let random = getRandomValue(1,4);
-            element.src = "";
-            break;
-        case "Krone":
-            element.src = "";
-            break;
-        case "Blume":
-            element.src = "";
-            break;
-    }
+    element.src = getIconByName(item.name);
 
-    //element.onclick =()=>{element.hidden = true};
+    element.onclick =async()=> {
+        await changeItemState(true,item.name);
+        let personData = await(await fetch("/api/person")).json();
+        await displayInventory(personData.things);
+    };
 
     document.getElementById("itemList").appendChild(element);
 }
 
+function getIconByName(name){
+    switch (name){
+        case "Ring":
+            return "/studentBodenschatzundBrose/icons/ring_gold-rot.png";
+        case "Schlüssel":
+            let random = getRandomValue(1,5);
+            return "/studentBodenschatzundBrose/icons/schlüssel"+random+".png";
+        case "Krone":
+            return "/studentBodenschatzundBrose/icons/krone_gold.png";
+        case "Blume":
+            return "/studentBodenschatzundBrose/icons/blume_lila.png";
+        default:
+            return "/studentBodenschatzundBrose/icons/kiste_v1.png";
+    }
+}
+
 async function displayInventory(items){
-    const inventory = await document.getElementById("inv");
-    for (const itemsKey in items) {
-        let child = document.createElement("img");
-        child.classList.add(itemsKey.toString());
-        inventory.appendChild(child);
+    for (let i = 0; i < 5; i++)document.getElementById("i"+i).innerText = '';
+
+    for (const item in items) {
+        for (let i = 0; i < 5; i++) {
+            let itemField = document.getElementById("i"+i);
+
+            if(itemField.innerText===items[item].name)break;
+            if (itemField.innerText === ''){
+                itemField.innerText = items[item].name;
+                itemField.style.lineHeight = '80px';
+
+                let elem = document.createElement("img");
+                elem.src = getIconByName(items[item].name);
+                elem.classList.add("item");
+
+                let x = document.createElement("img");
+                x.src = "/studentBodenschatzundBrose/icons/x.png";
+                x.classList.add("x");
+                x.onclick =async()=>{
+                    await changeItemState(false,items[item].name);
+                    itemField.innerText = '';
+                }
+
+                itemField.appendChild(elem);
+                itemField.appendChild(x);
+                break;
+            }
+        }
     }
 }
 
 async function getDoor(direction){
     const response = await fetch("/api/door/"+direction)
     let result = await response.json();
+    if(!response.ok)displayInConsole(result.error);
     return result;
 }
 
@@ -129,7 +211,7 @@ async function changeDoorState(direction,action,key){
         },
     });
     let result = await response.json();
-    window.alert(result.description);
+    if(!response.ok)displayInConsole(result.error);
 }
 
 async function goToNextRoom(direction){
@@ -140,12 +222,15 @@ async function goToNextRoom(direction){
         },
     });
     let result = await response.json();
-    window.alert(result.error.toString());
+    if(!response.ok)displayInConsole(result.error);
+    else displayInConsole(result.description);
+    return response.ok;
 }
 
 async function getRoomInfo(){
     const response = await fetch('/api/position');
     let result = await response.json();
+    if(!response.ok)displayInConsole(result.error);
     return result;
 }
 
@@ -166,8 +251,40 @@ async function changeItemState(take,name){ //take -> true=take false=drop
         });
 
     let result = await response.json();
+    if(!response.ok)displayInConsole(result.error);
 }
 
-async function takeItem(){
+function displayInConsole(message){
+    let con = document.getElementById('console');
+    con.innerText = ':: '+message + '\n' + con.innerText;
 
+    let lines = con.innerText.split("\n");
+
+    if(lines.length==15){
+        let cut = lines[13].length+1;
+        console.log(cut);
+        con.innerText = con.innerText.substring(0,con.innerText.length-cut);
+    }
+}
+
+function initMap(){
+    const map = document.getElementById("map");
+
+    for (let i = 0; i < 61; i++) {
+        for (let j = 0; j < 61; j++) {
+            let mapPart = document.createElement("img");
+            mapPart.src = "/studentBodenschatzundBrose/icons/minimap/blank.png";
+            mapPart.id = "mp"+i+j;
+            mapPart.classList.add("mapPart");
+            map.appendChild(mapPart);
+        }
+    }
+
+    setMapPart(30,30,true);
+}
+
+function setMapPart(x,y,current){
+    let mapPart = document.getElementById("mp"+x+y);
+    if(current)mapPart.src = "/studentBodenschatzundBrose/icons/minimap/current.png";
+    else mapPart.src = "/studentBodenschatzundBrose/icons/minimap/test.png";
 }
