@@ -5,7 +5,7 @@ let xy = [30,30];
 window.onload=async()=>{
     document.getElementById('message').hidden = true;
 
-    initMap();
+    await initMap();
     let personData = await(await fetch("/api/person")).json();
     displayAllDoors(false);
 
@@ -279,7 +279,7 @@ function displayMessage(message){
     //setTimeout(function (){div.hidden=true},5000);
 }
 
-function initMap(){
+async function initMap(){
     const map = document.getElementById("map");
 
     for (let i = 0; i < 61; i++) {
@@ -292,13 +292,24 @@ function initMap(){
         }
     }
 
-    setMapPart(30,30,true);
+    await setMapPart(30,30,true);
 }
 
-function setMapPart(x,y,current) {
+async function setMapPart(x,y,current) {
     let mapPart = document.getElementById("mp" + x + y);
-    if (current) mapPart.src = "/studentBodenschatzundBrose/icons/minimap/current.png";
-    else mapPart.src = "/studentBodenschatzundBrose/icons/minimap/test.png";
+    let positionInfo = await getRoomInfo();
+
+    let dirString = "";
+    const allDirections = ['n', 'e', 's', 'w'];
+    for (const dir in allDirections) {
+        if (positionInfo.directions.includes(allDirections[dir])) dirString += allDirections[dir];
+    }
+
+    if (current) {
+        mapPart.src = "/studentBodenschatzundBrose/icons/minimap/" + dirString + ".png";
+        mapPart.style.filter = 'brightness(150%)';
+    }
+    else mapPart.style.filter = 'brightness(100%)';
 }
 
 async function setIconState(direction){
