@@ -3,8 +3,11 @@
 let xy = [30,30];
 
 window.onload=async()=>{
+    document.getElementById('message').hidden = true;
+
     initMap();
     let personData = await(await fetch("/api/person")).json();
+    displayAllDoors(false);
 
     document.getElementById("menu").innerHTML = (
         'Welcome '+personData.name+"<br><br>"+"How to Play?<br>"+
@@ -20,9 +23,10 @@ window.onload=async()=>{
     for (const direction in directions) {
         let dir = directions[direction]
         document.getElementById(dir+"door").onclick=()=>doorOnClick(dir);
-        document.getElementById(dir+"lock").onclick=()=>changeDoorState(dir,"unlock","Schlüssel");
-        document.getElementById(dir+"dooricon").onclick=()=>changeDoorState(dir,"open","");
     }
+
+    let roomInfo = await getRoomInfo();
+    displayMessage(roomInfo.description);
 
     await updateRoom();
 }
@@ -55,9 +59,9 @@ async function updateRoom(){
 
     document.getElementById("room").style.background = roomInfo.color;
 
-    displayAllDoors(false);
     for (const door in roomInfo.directions) {
         displayDoor(true,roomInfo.directions[door]);
+        await setIconState(roomInfo.directions[door]);
     }
 
     const list = document.getElementById("itemList").childNodes;
@@ -93,34 +97,28 @@ function displayAllDoors(show){
 
     for (const door in allDoors) {
         let elem = document.getElementById(allDoors[door]);
-        if (show) elem.hidden = false;
-        else elem.hidden = true;
+        elem.hidden = !show;
     }
 
     for (const menu in allMenus) {
         let m = document.getElementById(allMenus[menu]);
-        if (show) m.hidden = false;
-        else m.hidden = true;
+        m.hidden = !show;
     }
 }
 
 function displayDoor(show,id){
     let elem = document.getElementById(id+"door");
-    let menu = document.getElementById(id+"menu");
 
     if (show) {
         elem.hidden = false;
-        menu.hidden = false;
     }
     else {
-        menu.hidden = true;
         elem.hidden = true;
     }
 }
 
 function getRandomValue(min,max){
-    let random=min+Math.floor(Math.random()*(max-min));
-    return random;
+    return min + Math.floor(Math.random() * (max - min));
 }
 
 function displayItem(item){
@@ -193,10 +191,15 @@ async function displayInventory(items){
 }
 
 async function getDoor(direction){
-    const response = await fetch("/api/door/"+direction)
+    try{
+    const response = await fetch("/api/door/"+direction);
     let result = await response.json();
-    if(!response.ok)displayInConsole(result.error);
     return result;
+    }
+    catch (error){
+    displayInConsole(result.error);
+    return null;
+    }
 }
 
 async function changeDoorState(direction,action,key){
@@ -223,7 +226,10 @@ async function goToNextRoom(direction){
     });
     let result = await response.json();
     if(!response.ok)displayInConsole(result.error);
-    else displayInConsole(result.description);
+    else {
+        displayMessage(result.description);
+        displayAllDoors(false);
+    }
     return response.ok;
 }
 
@@ -256,15 +262,21 @@ async function changeItemState(take,name){ //take -> true=take false=drop
 
 function displayInConsole(message){
     let con = document.getElementById('console');
-    con.innerText = ':: '+message + '\n' + con.innerText;
+    con.innerText = '⬩ '+message + '\n' + con.innerText;
 
     let lines = con.innerText.split("\n");
 
-    if(lines.length==15){
-        let cut = lines[13].length+1;
-        console.log(cut);
+    if(lines.length===12){
+        let cut = lines[9].length+1;
         con.innerText = con.innerText.substring(0,con.innerText.length-cut);
     }
+}
+
+function displayMessage(message){
+    let div = document.getElementById('message');
+    div.innerText = message;
+    div.hidden = false;
+    //setTimeout(function (){div.hidden=true},5000);
 }
 
 function initMap(){
@@ -283,8 +295,37 @@ function initMap(){
     setMapPart(30,30,true);
 }
 
-function setMapPart(x,y,current){
-    let mapPart = document.getElementById("mp"+x+y);
-    if(current)mapPart.src = "/studentBodenschatzundBrose/icons/minimap/current.png";
+function setMapPart(x,y,current) {
+    let mapPart = document.getElementById("mp" + x + y);
+    if (current) mapPart.src = "/studentBodenschatzundBrose/icons/minimap/current.png";
     else mapPart.src = "/studentBodenschatzundBrose/icons/minimap/test.png";
+}
+
+async function setIconState(direction){
+    let menu = document.getElementById(direction+"menu");
+    let lock = document.getElementById(direction+"lock");
+    let icon = document.getElementById(direction+"dooricon");
+
+    let data = await getDoor(direction);
+    if(data === null)return;
+
+    menu.hidden = !data.closable;
+
+    if (!data.open) {
+        icon.onclick=()=>changeDoorState(direction,"open","");
+        icon.src = "/studentBodenschatzundBrose/icons/opendoor_closed.png";
+    }
+    else {
+        icon.onclick=()=>changeDoorState(direction,"close","");
+        icon.src = "/studentBodenschatzundBrose/icons/opendoor_open.png";
+    }
+
+    if (!data.locked) {
+        lock.onclick=()=>changeDoorState(direction,"lock","Schlüssel");
+        lock.src = "/studentBodenschatzundBrose/icons/lock_open.png"
+    }
+    else {
+        lock.onclick=()=>changeDoorState(direction,"unlock","Schlüssel");
+        lock.src = "/studentBodenschatzundBrose/icons/lock_closed.png"
+    }
 }
