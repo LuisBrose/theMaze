@@ -285,6 +285,11 @@ body{
     transform: translate(-50%, 0);
     text-align: center;
     top: 0%;
+}
 
+.character{
+    position: absolute;
+    height: 145px;
+    width: 110px;
 }
 

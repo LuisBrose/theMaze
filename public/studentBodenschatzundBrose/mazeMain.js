@@ -3,6 +3,7 @@
 let xy = [30,30];
 
 window.onload=async()=>{
+    displayCharacters("hi");
     document.getElementById('message').hidden = true;
 
     document.getElementById("map").onclick =()=> showMap(true);
@@ -32,12 +33,26 @@ window.onload=async()=>{
 }
 //http://localhost:3000/studentBodenschatzundBrose/theMaze.html
 
+function blockButtons(timeout){
+    const allDir = ["n","w","s","e"];
+
+    allDir.forEach(function(dir){document.getElementById(dir+"door").onclick = null;})
+
+    setTimeout(function (){
+        allDir.forEach(function(dir){
+            document.getElementById(dir+"door").onclick =()=> doorOnClick(dir);
+        })
+    },timeout);
+}
+
 async function doorOnClick(direction){
+    blockButtons(1000);
+
     let x = xy[0];
     let y = xy[1];
 
     if(await goToNextRoom(direction)){
-        setMapPart(x,y,false);
+        await setMapPart(x, y, false);
         switch (direction){
             case 'n': x--;
                 break;
@@ -88,7 +103,7 @@ async function updateRoom(){
         displayItem(roomInfo.things[thing]);
     }
 
-    setTimeout(await updateRoom,100);
+    setTimeout(await updateRoom,200);
 }
 
 function displayAllDoors(show){
@@ -145,16 +160,16 @@ function displayItem(item){
 function getIconByName(name){
     switch (name){
         case "Ring":
-            return "/studentBodenschatzundBrose/icons/ring_gold-rot.png";
+            return "icons/ring_gold-rot.png";
         case "Schlüssel":
             let random = getRandomValue(1,5);
-            return "/studentBodenschatzundBrose/icons/schlüssel"+random+".png";
+            return "icons/schlüssel"+random+".png";
         case "Krone":
-            return "/studentBodenschatzundBrose/icons/krone_gold.png";
+            return "icons/krone_gold.png";
         case "Blume":
-            return "/studentBodenschatzundBrose/icons/blume_lila.png";
+            return "icons/blume_lila.png";
         default:
-            return "/studentBodenschatzundBrose/icons/kiste_v1.png";
+            return "icons/kiste_v1.png";
     }
 }
 
@@ -175,7 +190,7 @@ async function displayInventory(items){
                 elem.classList.add("item");
 
                 let x = document.createElement("img");
-                x.src = "/studentBodenschatzundBrose/icons/x.png";
+                x.src = "icons/x.png";
                 x.classList.add("x");
                 x.onclick =async()=>{
                     await changeItemState(false,items[item].name);
@@ -285,7 +300,7 @@ async function initMap(){
     for (let i = 0; i < 61; i++) {
         for (let j = 0; j < 61; j++) {
             let mapPart = document.createElement("img");
-            mapPart.src = "/studentBodenschatzundBrose/icons/minimap/blank.png";
+            mapPart.src = "icons/minimap/blank.png";
             mapPart.id = "mp"+i+j;
             mapPart.classList.add("mapPart");
             map.appendChild(mapPart);
@@ -306,7 +321,7 @@ async function setMapPart(x,y,current) {
     }
 
     if (current) {
-        mapPart.src = "/studentBodenschatzundBrose/icons/minimap/" + dirString + ".png";
+        mapPart.src = "icons/minimap/" + dirString + ".png";
         mapPart.style.filter = 'brightness(150%)';
     }
     else mapPart.style.filter = 'brightness(100%)';
@@ -324,20 +339,20 @@ async function setIconState(direction){
 
     if (!data.open) {
         icon.onclick=()=>changeDoorState(direction,"open","");
-        icon.src = "/studentBodenschatzundBrose/icons/opendoor_closed.png";
+        icon.src = "icons/opendoor_closed.png";
     }
     else {
         icon.onclick=()=>changeDoorState(direction,"close","");
-        icon.src = "/studentBodenschatzundBrose/icons/opendoor_open.png";
+        icon.src = "icons/opendoor_open.png";
     }
 
     if (!data.locked) {
         lock.onclick=()=>changeDoorState(direction,"lock","Schlüssel");
-        lock.src = "/studentBodenschatzundBrose/icons/lock_open.png"
+        lock.src = "icons/lock_open.png"
     }
     else {
         lock.onclick=()=>changeDoorState(direction,"unlock","Schlüssel");
-        lock.src = "/studentBodenschatzundBrose/icons/lock_closed.png"
+        lock.src = "icons/lock_closed.png"
     }
 }
 
@@ -352,4 +367,13 @@ function showMap(show){
         map.onclick =()=> showMap(true);
         map.style.transform = 'scale(100%) translate(0%,0%)';
     }
+}
+
+function displayCharacters(names){
+    let char = document.createElement("img");
+    char.innerText = "Lempel";
+    char.src = "icons/characters/charakter"+getRandomValue(2,5)+".png";
+    char.classList.add("character");
+    document.getElementById("players").appendChild(document.createElement("span"));
+    document.getElementById("players").appendChild(char);
 }
