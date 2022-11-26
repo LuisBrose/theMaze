@@ -1,15 +1,16 @@
 "use strict";
 
 let xy = [30,30];
+let oldRoomInfo = [];
 
 window.onload=async()=>{
-    displayCharacters("hi");
     document.getElementById('message').hidden = true;
 
     document.getElementById("map").onclick =()=> showMap(true);
 
     await initMap();
-    let personData = await(await fetch("/api/person")).json();
+    let personData = await getPersonData();
+
     displayAllDoors(false);
 
     document.getElementById("menu").innerHTML = (
@@ -63,7 +64,7 @@ async function doorOnClick(direction){
             case 's': x++;
                 break;
         }
-        setMapPart(x,y,true);
+        await setMapPart(x, y, true);
     }
 
     xy = [x,y];
@@ -102,6 +103,8 @@ async function updateRoom(){
     for (const thing in roomInfo.things) {
         displayItem(roomInfo.things[thing]);
     }
+
+    updatePlayers(roomInfo);
 
     setTimeout(await updateRoom,200);
 }
@@ -275,6 +278,15 @@ async function changeItemState(take,name){ //take -> true=take false=drop
     if(!response.ok)displayInConsole(result.error);
 }
 
+async function getPersonData(){
+    let response = await fetch("/api/person");
+    if(!response.ok)displayInConsole(data.error);
+    else{
+        return await response.json();
+    }
+    return null;
+}
+
 function displayInConsole(message){
     let con = document.getElementById('console');
     con.innerText = '⬩ '+message + '\n' + con.innerText;
@@ -369,11 +381,28 @@ function showMap(show){
     }
 }
 
-function displayCharacters(names){
+function updatePlayers(roomInfo){
+    if(JSON.stringify(roomInfo) !== JSON.stringify(oldRoomInfo)){
+        oldRoomInfo = roomInfo;
+        document.getElementById("players").innerText = "";
+        for (const person in roomInfo.persons){
+            displayCharacters(roomInfo.persons[person].name)
+        }
+    }
+}
+
+function displayCharacters(name){
+    let div = document.createElement("div");
+    div.id = name;
+    div.style.top = getRandomValue(0,85)+"%";
+    div.style.left = getRandomValue(0,85)+"%";
+    div.classList.add("player");
+    div.innerText = name;
+
     let char = document.createElement("img");
-    char.innerText = "Lempel";
-    char.src = "icons/characters/charakter"+getRandomValue(2,5)+".png";
+    char.src = "icons/characters/charakter"+getRandomValue(2,5)+"_kopf.png";
     char.classList.add("character");
-    document.getElementById("players").appendChild(document.createElement("span"));
-    document.getElementById("players").appendChild(char);
+
+    document.getElementById("players").appendChild(div);
+    div.appendChild(char);
 }
