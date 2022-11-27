@@ -6,7 +6,10 @@ let character = 2;
 let playername = "";
 
 window.onload=async()=>{
-    hashName("Zdolf")
+    document.getElementById("button").onclick =()=>{
+        document.getElementById("overlay").style.display = "none";
+        document.documentElement.requestFullscreen();
+    }
 
     document.getElementById('message').hidden = true;
     document.getElementById("map").onclick =()=> showMap(true);
@@ -24,9 +27,9 @@ window.onload=async()=>{
     document.getElementById("menu").innerHTML = (
         'Willkommen '+personData.name+"<br>"+
             "<br>Wähle einen Charakter:"+
-            "<img src='icons/characters/charakter2.png' class=\"playericon\" id=\"pi1\">"+
-            "<img src='icons/characters/charakter3.png' class=\"playericon\" id=\"pi2\">"+
-            "<img src='icons/characters/charakter4.png' class=\"playericon\" id=\"pi3\">"
+            "<img src='icons/characters/charakter2.png' class=\"playericon\" id=\"pi1\" alt=\"Link\">"+
+            "<img src='icons/characters/charakter3.png' class=\"playericon\" id=\"pi2\" alt=\"Rex\">"+
+            "<img src='icons/characters/charakter4.png' class=\"playericon\" id=\"pi3\" alt=\"Santa\">"
     );
 
     await displayInventory(personData.things);
@@ -63,7 +66,7 @@ function blockButtons(timeout){
 }
 
 async function doorOnClick(direction){
-    blockButtons(1000);
+    blockButtons(500);
 
     let x = xy[0];
     let y = xy[1];
@@ -143,12 +146,7 @@ function displayAllDoors(show){
 function displayDoor(show,id){
     let elem = document.getElementById(id+"door");
 
-    if (show) {
-        elem.hidden = false;
-    }
-    else {
-        elem.hidden = true;
-    }
+    elem.hidden = !show;
 }
 
 function getRandomValue(min,max){
@@ -225,15 +223,14 @@ async function displayInventory(items){
 }
 
 async function getDoor(direction){
-    try{
     const response = await fetch("/api/door/"+direction);
-    let result = await response.json();
+    const result = await response.json();
+
+    if(!response.ok){
+        displayInConsole(result.error);
+        displayAllDoors(false);
+    }
     return result;
-    }
-    catch (error){
-    displayInConsole(result.error);
-    return null;
-    }
 }
 
 async function changeDoorState(direction,action,key){
@@ -296,7 +293,7 @@ async function changeItemState(take,name){ //take -> true=take false=drop
 
 async function getPersonData(){
     let response = await fetch("/api/person");
-    if(!response.ok)displayInConsole(data.error);
+    if(!response.ok)displayInConsole((await (response).json()).error);
     else{
         return await response.json();
     }
@@ -389,7 +386,7 @@ function showMap(show){
 
     if(show){
         map.onclick =()=> showMap(false);
-        map.style.transform = 'scale(200%) translate(-84%,-27%)';
+        map.style.transform = 'scale(200%) translate(-86%,-27%)';
     }
     else{
         map.onclick =()=> showMap(true);
@@ -432,7 +429,6 @@ function saveMap() {
     sessionStorage.setItem("map", elementHtml);
     sessionStorage.setItem("x", xy[0])
     sessionStorage.setItem("y", xy[1])
-    console.log(xy[0],xy[1]);
 }
 
 async function restoreMap() {
