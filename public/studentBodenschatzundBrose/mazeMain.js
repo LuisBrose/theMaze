@@ -2,20 +2,31 @@
 
 let xy = [30,30];
 let oldRoomInfo = [];
+let character = 2;
+let playername = "";
 
 window.onload=async()=>{
-    document.getElementById('message').hidden = true;
+    hashName("Zdolf")
 
+    document.getElementById('message').hidden = true;
     document.getElementById("map").onclick =()=> showMap(true);
 
-    await initMap();
+    if(sessionStorage.length === 0) {
+        await initMap();
+    }
+    else await restoreMap();
+
     let personData = await getPersonData();
+    playername = personData.name;
 
     displayAllDoors(false);
 
     document.getElementById("menu").innerHTML = (
-        'Welcome '+personData.name+"<br>"+
-            "Find the Treasure to win<br>Good Luck Adventurer"
+        'Willkommen '+personData.name+"<br>"+
+            "<br>Wähle einen Charakter:"+
+            "<img src='icons/characters/charakter2.png' class=\"playericon\" id=\"pi1\">"+
+            "<img src='icons/characters/charakter3.png' class=\"playericon\" id=\"pi2\">"+
+            "<img src='icons/characters/charakter4.png' class=\"playericon\" id=\"pi3\">"
     );
 
     await displayInventory(personData.things);
@@ -29,6 +40,11 @@ window.onload=async()=>{
 
     let roomInfo = await getRoomInfo();
     displayMessage(roomInfo.description);
+
+    setCharactermodel(1);
+    for (let i = 1; i < 4; i++) {
+        document.getElementById("pi"+i).onclick =()=> setCharactermodel(i);
+    }
 
     await updateRoom();
 }
@@ -66,8 +82,8 @@ async function doorOnClick(direction){
         }
         await setMapPart(x, y, true);
     }
-
     xy = [x,y];
+    saveMap();
 }
 
 async function updateRoom(){
@@ -400,9 +416,52 @@ function displayCharacters(name){
     div.innerText = name;
 
     let char = document.createElement("img");
-    char.src = "icons/characters/charakter"+getRandomValue(2,5)+"_kopf.png";
+    if(name === playername){
+        char.src = "icons/characters/charakter"+character+"_kopf.png";
+    }
+    else char.src = "icons/characters/charakter"+hashName(name)+"_kopf.png";
     char.classList.add("character");
 
     document.getElementById("players").appendChild(div);
     div.appendChild(char);
+}
+
+function saveMap() {
+    const element = document.getElementById("map");
+    const elementHtml = element.innerHTML;
+    sessionStorage.setItem("map", elementHtml);
+    sessionStorage.setItem("x", xy[0])
+    sessionStorage.setItem("y", xy[1])
+    console.log(xy[0],xy[1]);
+}
+
+async function restoreMap() {
+    const element = document.getElementById("map");
+    element.innerHTML = sessionStorage.getItem("map");
+
+    xy[0] = sessionStorage.getItem("x");
+    xy[1] = sessionStorage.getItem("y");
+
+    await setMapPart(xy[0],xy[1],true);
+}
+
+function setCharactermodel(modelnumber){
+    for (let i = 1; i < 4; i++) {
+        let obj = document.getElementById("pi"+i);
+        obj.style.filter = "brightness(50%)";
+
+    }
+    character = modelnumber+1;
+    let obj = document.getElementById("pi"+modelnumber);
+    obj.style.filter = "brightness(100%)";
+}
+
+function hashName(name){
+    name = name.toLowerCase();
+
+    let value = name.charCodeAt(0)-96;
+
+    if(value <= 9) return 2;
+    if(value <= 18) return 3;
+    return 4;
 }

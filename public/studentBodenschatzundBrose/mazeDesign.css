@@ -134,6 +134,11 @@ body{
     -webkit-box-shadow:0 120px 120px 20px bisque;
 }
 
+#ndoor:hover{
+    transform: scale(1.05);
+    cursor: n-resize;
+}
+
 #wdoor{
     z-index: 4;
     position: absolute;
@@ -142,6 +147,11 @@ body{
     width: 50px;
     height: 120px;
     -webkit-box-shadow:60px 0 120px 20px bisque;
+}
+
+#wdoor:hover{
+    transform: scale(1.05);
+    cursor: w-resize;
 }
 
 #edoor{
@@ -154,6 +164,11 @@ body{
     -webkit-box-shadow:-60px 0 120px 20px bisque;
 }
 
+#edoor:hover{
+    transform: scale(1.05);
+    cursor: e-resize;
+}
+
 #sdoor{
     z-index: 4;
     position: absolute;
@@ -162,6 +177,11 @@ body{
     width: 90px;
     height: 150px;
     -webkit-box-shadow:0px -120px 120px 20px bisque;
+}
+
+#sdoor:hover{
+    transform: scale(1.05);
+    cursor: s-resize;
 }
 
 .invitem{
@@ -177,6 +197,11 @@ body{
     position: absolute;
     width: 80px;
     height: 80px;
+}
+
+.item:hover{
+    transform: scale(1.05);
+    cursor: grabbing;
 }
 
 #doorNImg{
@@ -208,6 +233,10 @@ body{
 .x{
     position: absolute;
     right:0%;
+}
+
+.x:hover{
+    transform: scale(1.2);
 }
 
 .mapPart{
@@ -293,9 +322,24 @@ body{
     width: 50px;
 }
 
-.player{
+.player {
     position: absolute;
     font-size: 20px;
     line-height: 60px;
 }
 
+.playericon{
+    height: 140px;
+    width: 100px;
+}
+
+.playericon:hover{
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.menuitem:hover{
+    transform: scale(1.05);
+    filter: brightness(150%);
+    cursor: pointer;
+}
