@@ -123,7 +123,7 @@ async function updateRoom(){
         displayItem(roomInfo.things[thing]);
     }
 
-    updatePlayers(roomInfo);
+    updatePlayers(roomInfo, false);
 
     setTimeout(await updateRoom,200);
 }
@@ -403,8 +403,8 @@ function showMap(show){
     }
 }
 
-function updatePlayers(roomInfo){
-    if(JSON.stringify(roomInfo.persons) !== JSON.stringify(oldRoomInfo.persons)){
+function updatePlayers(roomInfo, skinChange){
+    if(JSON.stringify(roomInfo.persons) !== JSON.stringify(oldRoomInfo.persons) || skinChange){
         oldRoomInfo = roomInfo;
         document.getElementById("players").innerText = "";
         for (const person in roomInfo.persons){
@@ -460,6 +460,7 @@ function setCharactermodel(modelnumber){
     character = modelnumber+1;
     let obj = document.getElementById("pi"+modelnumber);
     obj.style.filter = "brightness(100%)";
+    updatePlayers(oldRoomInfo, true);
 }
 
 function hashName(name){
