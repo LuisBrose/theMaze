@@ -328,6 +328,10 @@ async function initMap(){
         for (let j = 0; j < 61; j++) {
             let mapPart = document.createElement("img");
             mapPart.src = "icons/minimap/blank.png";
+
+            if(i<10) i = '0'+i;
+            if(j<10) j = '0'+j;
+
             mapPart.id = "mp"+i+j;
             mapPart.classList.add("mapPart");
             map.appendChild(mapPart);
@@ -338,6 +342,9 @@ async function initMap(){
 }
 
 async function setMapPart(x,y,current) {
+    if(x<10) x='0'+x;
+    if(y<10) y='0'+y;
+
     let mapPart = document.getElementById("mp" + x + y);
     let positionInfo = await getRoomInfo();
 
@@ -348,6 +355,7 @@ async function setMapPart(x,y,current) {
     }
 
     if (current) {
+        displayInConsole('x: '+xy[0]+'    y: '+xy[1]);
         mapPart.src = "icons/minimap/" + dirString + ".png";
         mapPart.style.filter = 'brightness(150%)';
     }

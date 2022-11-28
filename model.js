@@ -402,12 +402,12 @@ exports.createModel = function(users) {
     new exports.Door(vorraum, "e", schatzkammer, true, false, true, [key]);
     new exports.Door(vorraum, "n", thronraum);
 
-    /*
+/*
     new exports.Door(thronraum2, "n", thronraum2);
     new exports.Door(thronraum2, "e", thronraum2);
     new exports.Door(thronraum2, "s", thronraum2);
     new exports.Door(thronraum2, "w", thronraum2);
-     */
+*/
 
     garten1.things.push(new exports.Thing("Blume"));
     vorraum.things.push(key);
