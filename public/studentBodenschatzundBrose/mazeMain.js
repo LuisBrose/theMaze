@@ -355,7 +355,6 @@ async function setMapPart(x,y,current) {
     }
 
     if (current) {
-        displayInConsole('x: '+xy[0]+'    y: '+xy[1]);
         mapPart.src = "icons/minimap/" + dirString + ".png";
         mapPart.style.filter = 'brightness(150%)';
     }
