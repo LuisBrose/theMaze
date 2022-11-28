@@ -179,8 +179,7 @@ function getIconByName(name){
         case "Ring":
             return "icons/ring_gold-rot.png";
         case "Schlüssel":
-            let random = getRandomValue(1,5);
-            return "icons/schlüssel"+random+".png";
+            return "icons/schlüssel2.png";
         case "Krone":
             return "icons/krone_gold.png";
         case "Blume":
@@ -306,16 +305,19 @@ function displayInConsole(message){
 
     let lines = con.innerText.split("\n");
 
-    if(lines.length===10){
-        let cut = lines[7].length+1;
-        con.innerText = con.innerText.substring(0,con.innerText.length-cut);
+    if(lines.length>=13){
+        let cutVersion="";
+        for (let i = 0; i < 11; i++) {
+            cutVersion = cutVersion+lines[i]+'\n';
+        }
+        con.innerText = cutVersion;
     }
 }
 
 function displayMessage(message){
     let div = document.getElementById('message');
     div.innerText = message;
-    div.hidden = false;
+    //div.hidden = false;
     //setTimeout(function (){div.hidden=true},5000);
 }
 
@@ -395,12 +397,13 @@ function showMap(show){
 }
 
 function updatePlayers(roomInfo){
-    if(JSON.stringify(roomInfo) !== JSON.stringify(oldRoomInfo)){
+    if(JSON.stringify(roomInfo.persons) !== JSON.stringify(oldRoomInfo.persons)){
         oldRoomInfo = roomInfo;
         document.getElementById("players").innerText = "";
         for (const person in roomInfo.persons){
             displayCharacters(roomInfo.persons[person].name)
         }
+        if(!document.getElementById(playername))displayCharacters(playername);
     }
 }
 
