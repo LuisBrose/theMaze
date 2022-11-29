@@ -1,19 +1,35 @@
 "use strict";
 
 let xy = [30,30];
+let oldRoomInfo = [];
+let character = 2;
+let playername = "";
 
 window.onload=async()=>{
-    document.getElementById('message').hidden = true;
+    document.getElementById("button").onclick =()=>{
+        document.getElementById("overlay").style.display = "none";
+        document.documentElement.requestFullscreen();
+    }
 
-    await initMap();
-    let personData = await(await fetch("/api/person")).json();
+    document.getElementById('message').hidden = true;
+    document.getElementById("map").onclick =()=> showMap(true);
+
+    if(sessionStorage.length === 0) {
+        await initMap();
+    }
+    else await restoreMap();
+
+    let personData = await getPersonData();
+    playername = personData.name;
+
     displayAllDoors(false);
 
     document.getElementById("menu").innerHTML = (
-        'Welcome '+personData.name+"<br><br>"+"How to Play?<br>"+
-            "door: enter the next room<br>"+
-            "lock: unlock door (find a key first)<br>"+
-            "Find the Treasure to win<br><br>Good Luck Adventurer"
+        'Willkommen '+personData.name+"<br>"+
+            "<br>Wähle einen Charakter:"+
+            "<img src='icons/characters/charakter2.png' class=\"playericon\" id=\"pi1\" alt=\"Link\">"+
+            "<img src='icons/characters/charakter3.png' class=\"playericon\" id=\"pi2\" alt=\"Rex\">"+
+            "<img src='icons/characters/charakter4.png' class=\"playericon\" id=\"pi3\" alt=\"Santa\">"
     );
 
     await displayInventory(personData.things);
@@ -28,16 +44,35 @@ window.onload=async()=>{
     let roomInfo = await getRoomInfo();
     displayMessage(roomInfo.description);
 
+    setCharactermodel(1);
+    for (let i = 1; i < 4; i++) {
+        document.getElementById("pi"+i).onclick =()=> setCharactermodel(i);
+    }
+
     await updateRoom();
 }
 //http://localhost:3000/studentBodenschatzundBrose/theMaze.html
 
+function blockButtons(timeout){
+    const allDir = ["n","w","s","e"];
+
+    allDir.forEach(function(dir){document.getElementById(dir+"door").onclick = null;})
+
+    setTimeout(function (){
+        allDir.forEach(function(dir){
+            document.getElementById(dir+"door").onclick =()=> doorOnClick(dir);
+        })
+    },timeout);
+}
+
 async function doorOnClick(direction){
+    blockButtons(500);
+
     let x = xy[0];
     let y = xy[1];
 
     if(await goToNextRoom(direction)){
-        setMapPart(x,y,false);
+        await setMapPart(x, y, false);
         switch (direction){
             case 'n': x--;
                 break;
@@ -48,10 +83,10 @@ async function doorOnClick(direction){
             case 's': x++;
                 break;
         }
-        setMapPart(x,y,true);
+        await setMapPart(x, y, true);
     }
-
     xy = [x,y];
+    saveMap();
 }
 
 async function updateRoom(){
@@ -88,7 +123,9 @@ async function updateRoom(){
         displayItem(roomInfo.things[thing]);
     }
 
-    setTimeout(await updateRoom,100);
+    updatePlayers(roomInfo, false);
+
+    setTimeout(await updateRoom,200);
 }
 
 function displayAllDoors(show){
@@ -109,12 +146,7 @@ function displayAllDoors(show){
 function displayDoor(show,id){
     let elem = document.getElementById(id+"door");
 
-    if (show) {
-        elem.hidden = false;
-    }
-    else {
-        elem.hidden = true;
-    }
+    elem.hidden = !show;
 }
 
 function getRandomValue(min,max){
@@ -145,16 +177,15 @@ function displayItem(item){
 function getIconByName(name){
     switch (name){
         case "Ring":
-            return "/studentBodenschatzundBrose/icons/ring_gold-rot.png";
+            return "icons/ring_gold-rot.png";
         case "Schlüssel":
-            let random = getRandomValue(1,5);
-            return "/studentBodenschatzundBrose/icons/schlüssel"+random+".png";
+            return "icons/schlüssel2.png";
         case "Krone":
-            return "/studentBodenschatzundBrose/icons/krone_gold.png";
+            return "icons/krone_gold.png";
         case "Blume":
-            return "/studentBodenschatzundBrose/icons/blume_lila.png";
+            return "icons/blume_lila.png";
         default:
-            return "/studentBodenschatzundBrose/icons/kiste_v1.png";
+            return "icons/kiste_v1.png";
     }
 }
 
@@ -175,7 +206,7 @@ async function displayInventory(items){
                 elem.classList.add("item");
 
                 let x = document.createElement("img");
-                x.src = "/studentBodenschatzundBrose/icons/x.png";
+                x.src = "icons/x.png";
                 x.classList.add("x");
                 x.onclick =async()=>{
                     await changeItemState(false,items[item].name);
@@ -191,15 +222,14 @@ async function displayInventory(items){
 }
 
 async function getDoor(direction){
-    try{
     const response = await fetch("/api/door/"+direction);
-    let result = await response.json();
+    const result = await response.json();
+
+    if(!response.ok){
+        displayInConsole(result.error);
+        displayAllDoors(false);
+    }
     return result;
-    }
-    catch (error){
-    displayInConsole(result.error);
-    return null;
-    }
 }
 
 async function changeDoorState(direction,action,key){
@@ -260,22 +290,34 @@ async function changeItemState(take,name){ //take -> true=take false=drop
     if(!response.ok)displayInConsole(result.error);
 }
 
+async function getPersonData(){
+    let response = await fetch("/api/person");
+    if(!response.ok)displayInConsole((await (response).json()).error);
+    else{
+        return await response.json();
+    }
+    return null;
+}
+
 function displayInConsole(message){
     let con = document.getElementById('console');
     con.innerText = '⬩ '+message + '\n' + con.innerText;
 
     let lines = con.innerText.split("\n");
 
-    if(lines.length===12){
-        let cut = lines[9].length+1;
-        con.innerText = con.innerText.substring(0,con.innerText.length-cut);
+    if(lines.length>=13){
+        let cutVersion="";
+        for (let i = 0; i < 11; i++) {
+            cutVersion = cutVersion+lines[i]+'\n';
+        }
+        con.innerText = cutVersion;
     }
 }
 
 function displayMessage(message){
     let div = document.getElementById('message');
     div.innerText = message;
-    div.hidden = false;
+    //div.hidden = false;
     //setTimeout(function (){div.hidden=true},5000);
 }
 
@@ -285,7 +327,11 @@ async function initMap(){
     for (let i = 0; i < 61; i++) {
         for (let j = 0; j < 61; j++) {
             let mapPart = document.createElement("img");
-            mapPart.src = "/studentBodenschatzundBrose/icons/minimap/blank.png";
+            mapPart.src = "icons/minimap/blank.png";
+
+            if(i<10) i = '0'+i;
+            if(j<10) j = '0'+j;
+
             mapPart.id = "mp"+i+j;
             mapPart.classList.add("mapPart");
             map.appendChild(mapPart);
@@ -296,6 +342,9 @@ async function initMap(){
 }
 
 async function setMapPart(x,y,current) {
+    if(x<10) x='0'+x;
+    if(y<10) y='0'+y;
+
     let mapPart = document.getElementById("mp" + x + y);
     let positionInfo = await getRoomInfo();
 
@@ -306,7 +355,7 @@ async function setMapPart(x,y,current) {
     }
 
     if (current) {
-        mapPart.src = "/studentBodenschatzundBrose/icons/minimap/" + dirString + ".png";
+        mapPart.src = "icons/minimap/" + dirString + ".png";
         mapPart.style.filter = 'brightness(150%)';
     }
     else mapPart.style.filter = 'brightness(100%)';
@@ -324,19 +373,102 @@ async function setIconState(direction){
 
     if (!data.open) {
         icon.onclick=()=>changeDoorState(direction,"open","");
-        icon.src = "/studentBodenschatzundBrose/icons/opendoor_closed.png";
+        icon.src = "icons/opendoor_closed.png";
     }
     else {
         icon.onclick=()=>changeDoorState(direction,"close","");
-        icon.src = "/studentBodenschatzundBrose/icons/opendoor_open.png";
+        icon.src = "icons/opendoor_open.png";
     }
 
     if (!data.locked) {
         lock.onclick=()=>changeDoorState(direction,"lock","Schlüssel");
-        lock.src = "/studentBodenschatzundBrose/icons/lock_open.png"
+        lock.src = "icons/lock_open.png"
     }
     else {
         lock.onclick=()=>changeDoorState(direction,"unlock","Schlüssel");
-        lock.src = "/studentBodenschatzundBrose/icons/lock_closed.png"
+        lock.src = "icons/lock_closed.png"
     }
+}
+
+function showMap(show){
+    let map = document.getElementById("map");
+
+    if(show){
+        map.onclick =()=> showMap(false);
+        map.style.transform = 'scale(200%) translate(-86%,-27%)';
+    }
+    else{
+        map.onclick =()=> showMap(true);
+        map.style.transform = 'scale(100%) translate(0%,0%)';
+    }
+}
+
+function updatePlayers(roomInfo, skinChange){
+    if(JSON.stringify(roomInfo.persons) !== JSON.stringify(oldRoomInfo.persons) || skinChange){
+        oldRoomInfo = roomInfo;
+        document.getElementById("players").innerText = "";
+        for (const person in roomInfo.persons){
+            displayCharacters(roomInfo.persons[person].name)
+        }
+        if(!document.getElementById(playername))displayCharacters(playername);
+    }
+}
+
+function displayCharacters(name){
+    let div = document.createElement("div");
+    div.id = name;
+    div.style.top = getRandomValue(0,85)+"%";
+    div.style.left = getRandomValue(0,85)+"%";
+    div.classList.add("player");
+    div.innerText = name;
+
+    let char = document.createElement("img");
+    if(name === playername){
+        char.src = "icons/characters/charakter"+character+"_kopf.png";
+    }
+    else char.src = "icons/characters/charakter"+hashName(name)+"_kopf.png";
+    char.classList.add("character");
+
+    document.getElementById("players").appendChild(div);
+    div.appendChild(char);
+}
+
+function saveMap() {
+    const element = document.getElementById("map");
+    const elementHtml = element.innerHTML;
+    sessionStorage.setItem("map", elementHtml);
+    sessionStorage.setItem("x", xy[0])
+    sessionStorage.setItem("y", xy[1])
+}
+
+async function restoreMap() {
+    const element = document.getElementById("map");
+    element.innerHTML = sessionStorage.getItem("map");
+
+    xy[0] = sessionStorage.getItem("x");
+    xy[1] = sessionStorage.getItem("y");
+
+    await setMapPart(xy[0],xy[1],true);
+}
+
+function setCharactermodel(modelnumber){
+    for (let i = 1; i < 4; i++) {
+        let obj = document.getElementById("pi"+i);
+        obj.style.filter = "brightness(50%)";
+
+    }
+    character = modelnumber+1;
+    let obj = document.getElementById("pi"+modelnumber);
+    obj.style.filter = "brightness(100%)";
+    updatePlayers(oldRoomInfo, true);
+}
+
+function hashName(name){
+    name = name.toLowerCase();
+
+    let value = name.charCodeAt(0)-96;
+
+    if(value <= 9) return 2;
+    if(value <= 18) return 3;
+    return 4;
 }

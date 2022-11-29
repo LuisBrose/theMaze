@@ -7,19 +7,28 @@
 }
 
 body{
+    background: black;
     font-family: 'alagardmedium';
     font-size: 50px;
-    background: darkslategray;
-    overflow: hidden;
-    -webkit-box-shadow: 0 0 50px black inset;
     color: ghostwhite;
-}
-
-#container{
-    height: 98vh;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    height: 950px;
+    width: 1900px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: darkslategray;
+    -webkit-box-shadow: 0 0 50px black inset;
 }
 
 #room{
@@ -31,13 +40,14 @@ body{
 }
 
 #map{
-    z-index: 6;
+    z-index: 20;
     display: flex;
     flex-wrap: wrap;
     position: absolute;
     bottom: 2%;
-    right: 1%;
-    -webkit-box-shadow: 0px 0px 60px darkolivegreen;
+    right: 0;
+    -webkit-box-shadow: 0px 0px 60px black;
+    background: darkolivegreen;
     height: 427px;
     width: 427px;
 }
@@ -45,7 +55,7 @@ body{
 #inv{
     position: absolute;
     top: 2%;
-    right: 1%;
+    right: 0;
     -webkit-box-shadow: 0 0 30px black inset;
     height: 450px;
     width: 400px;
@@ -55,13 +65,13 @@ body{
 #console{
     position: absolute;
     bottom: 2%;
-    left: 1%;
+    left: 0;
     -webkit-box-shadow: 0 0 30px black inset;
     height: 320px;
     width: 400px;
     background: darkslategray;
     color: red;
-    font-size: 26px;
+    font-size: 22px;
     text-align: center;
     padding: 50px 10px;
 }
@@ -71,7 +81,7 @@ body{
     font-family: 'alagardmedium';
     position: absolute;
     top: 2%;
-    left: 1%;
+    left: 0;
     -webkit-box-shadow: 0 0 30px black inset;
     height: 450px;
     width: 400px;
@@ -83,7 +93,7 @@ body{
 #nroom{
     z-index: 3;
     position: absolute;
-    top: 7%;
+    top: 8%;
     height: 80px;
     width: 800px;
     background-image: linear-gradient(to top,saddlebrown 0%,black 90%);
@@ -91,9 +101,9 @@ body{
 }
 
 #sroom{
-    z-index: 3;
+    z-index: 5;
     position: absolute;
-    bottom: 7%;
+    bottom: 8%;
     height: 80px;
     width: 800px;
     background-image: linear-gradient(to bottom,saddlebrown 0%,black 90%);
@@ -133,6 +143,11 @@ body{
     -webkit-box-shadow:0 120px 120px 20px bisque;
 }
 
+#ndoor:hover{
+    transform: scale(1.05);
+    cursor: n-resize;
+}
+
 #wdoor{
     z-index: 4;
     position: absolute;
@@ -141,6 +156,11 @@ body{
     width: 50px;
     height: 120px;
     -webkit-box-shadow:60px 0 120px 20px bisque;
+}
+
+#wdoor:hover{
+    transform: scale(1.05);
+    cursor: w-resize;
 }
 
 #edoor{
@@ -153,14 +173,24 @@ body{
     -webkit-box-shadow:-60px 0 120px 20px bisque;
 }
 
+#edoor:hover{
+    transform: scale(1.05);
+    cursor: e-resize;
+}
+
 #sdoor{
     z-index: 4;
     position: absolute;
     left: 45%;
-    bottom: -20%;
+    bottom: -15%;
     width: 90px;
     height: 150px;
     -webkit-box-shadow:0px -120px 120px 20px bisque;
+}
+
+#sdoor:hover{
+    transform: scale(1.05);
+    cursor: s-resize;
 }
 
 .invitem{
@@ -176,6 +206,11 @@ body{
     position: absolute;
     width: 80px;
     height: 80px;
+}
+
+.item:hover{
+    transform: scale(1.05);
+    cursor: grabbing;
 }
 
 #doorNImg{
@@ -207,6 +242,10 @@ body{
 .x{
     position: absolute;
     right:0%;
+}
+
+.x:hover{
+    transform: scale(1.2);
 }
 
 .mapPart{
@@ -284,6 +323,59 @@ body{
     transform: translate(-50%, 0);
     text-align: center;
     top: 0%;
-
 }
 
+.character{
+    position: absolute;
+    height: 50px;
+    width: 50px;
+}
+
+.player {
+    position: absolute;
+    font-size: 20px;
+    line-height: 60px;
+}
+
+.playericon{
+    height: 140px;
+    width: 100px;
+}
+
+.playericon:hover{
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.menuitem:hover{
+    transform: scale(1.05);
+    filter: brightness(150%);
+    cursor: pointer;
+}
+
+#overlay{
+    font-size: 150px;
+    transform: translateY(40%);
+    height: 110%;
+    width: 100%;
+    position: absolute;
+    z-index: 100;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#button{
+    font-size: 40px;
+    border: 5px solid gray;
+    border-radius: 50px;
+    padding: 20px 50px;
+}
+
+#button:hover{
+    background: #001616;
+    cursor: crosshair;
+    transform: scale(1.1);
+}
