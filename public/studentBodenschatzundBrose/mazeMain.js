@@ -182,7 +182,6 @@ function getIconByName(name){
         case "Ring":
             return "icons/ring_gold-rot.png";
         case "Schlüssel":
-            return "icons/kiste_v1.png";
             return "icons/schlüssel2.png";
         case "Krone":
             return "icons/krone_gold.png";
@@ -373,7 +372,6 @@ async function setIconState(direction){
     let icon = document.getElementById(direction+"dooricon");
 
     let data = await getDoor(direction);
-    let inventory = await getPersonData().things;
     if(data === null)return;
 
     menu.hidden = !data.closable;
