@@ -204,7 +204,7 @@ body{
     font-size: 30px;
     color: blue;
     position: absolute;
-    width: 80px;
+    width: 90px;
     height: 80px;
 }
 
@@ -263,7 +263,7 @@ body{
     background: darkslategray;
     border:darkslategray solid 1px;
     border-radius: 30px;
-    padding: -10px;
+    padding: 10px 0 20px 20px;
     opacity: 50%;
 }
 
@@ -277,7 +277,7 @@ body{
     background: darkslategray;
     border:darkslategray solid 1px;
     border-radius: 30px;
-    padding: -10px;
+    padding: 10px 0 20px 15px;
     opacity: 50%;
 }
 
@@ -291,7 +291,7 @@ body{
     background: darkslategray;
     border:darkslategray solid 1px;
     border-radius: 30px;
-    padding: 0px;
+    padding: 10px 0 20px 20px;
     opacity: 50%;
 
 }
@@ -306,7 +306,7 @@ body{
     background: darkslategray;
     border:darkslategray solid 1px;
     border-radius: 30px;
-    padding: -10px;
+    padding: 10px 0 20px 20px;
     opacity: 50%;
 }
 
@@ -347,6 +347,11 @@ body{
     cursor: pointer;
 }
 
+.menuitem{
+    width: 90px;
+    height: 110px;
+}
+
 .menuitem:hover{
     transform: scale(1.05);
     filter: brightness(150%);
@@ -378,4 +383,14 @@ body{
     background: #001616;
     cursor: crosshair;
     transform: scale(1.1);
+}
+
+#keychain{
+    height: 40px;
+    width: 200px;
+    background: none;
+    font-family: 'alagardmedium';
+    font-size: 30px;
+    color: ghostwhite;
+
 }

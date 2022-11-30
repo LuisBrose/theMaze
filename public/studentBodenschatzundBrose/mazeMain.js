@@ -4,6 +4,7 @@ let xy = [30,30];
 let oldRoomInfo = [];
 let character = 2;
 let playername = "";
+let keychain = "Schlüssel";
 
 window.onload=async()=>{
     document.getElementById("button").onclick =()=>{
@@ -29,7 +30,8 @@ window.onload=async()=>{
             "<br>Wähle einen Charakter:"+
             "<img src='icons/characters/charakter2.png' class=\"playericon\" id=\"pi1\" alt=\"Link\">"+
             "<img src='icons/characters/charakter3.png' class=\"playericon\" id=\"pi2\" alt=\"Rex\">"+
-            "<img src='icons/characters/charakter4.png' class=\"playericon\" id=\"pi3\" alt=\"Santa\">"
+            "<img src='icons/characters/charakter4.png' class=\"playericon\" id=\"pi3\" alt=\"Santa\">"+
+            "<br><br> Schlüsselbund: <br> <input type='text' id='keychain'>"
     );
 
     await displayInventory(personData.things);
@@ -92,6 +94,7 @@ async function doorOnClick(direction){
 async function updateRoom(){
     let roomInfo = await getRoomInfo();
 
+    keychain = document.getElementById('keychain').value;
     document.getElementById("room").style.background = roomInfo.color;
 
     for (const door in roomInfo.directions) {
@@ -179,6 +182,7 @@ function getIconByName(name){
         case "Ring":
             return "icons/ring_gold-rot.png";
         case "Schlüssel":
+            return "icons/kiste_v1.png";
             return "icons/schlüssel2.png";
         case "Krone":
             return "icons/krone_gold.png";
@@ -226,7 +230,8 @@ async function getDoor(direction){
     const result = await response.json();
 
     if(!response.ok){
-        displayInConsole(result.error);
+        console.log(result.error);
+        //displayInConsole(result.error);
         displayAllDoors(false);
     }
     return result;
@@ -245,6 +250,7 @@ async function changeDoorState(direction,action,key){
     });
     let result = await response.json();
     if(!response.ok)displayInConsole(result.error);
+    return response;
 }
 
 async function goToNextRoom(direction){
@@ -367,13 +373,14 @@ async function setIconState(direction){
     let icon = document.getElementById(direction+"dooricon");
 
     let data = await getDoor(direction);
+    let inventory = await getPersonData().things;
     if(data === null)return;
 
     menu.hidden = !data.closable;
 
     if (!data.open) {
         icon.onclick=()=>changeDoorState(direction,"open","");
-        icon.src = "icons/opendoor_closed.png";
+        icon.src = "icons/door_braun.png";
     }
     else {
         icon.onclick=()=>changeDoorState(direction,"close","");
@@ -381,11 +388,11 @@ async function setIconState(direction){
     }
 
     if (!data.locked) {
-        lock.onclick=()=>changeDoorState(direction,"lock","Schlüssel");
+        lock.onclick=()=>changeDoorState(direction,"lock",keychain);
         lock.src = "icons/lock_open.png"
     }
     else {
-        lock.onclick=()=>changeDoorState(direction,"unlock","Schlüssel");
+        lock.onclick=()=>changeDoorState(direction,"unlock",keychain);
         lock.src = "icons/lock_closed.png"
     }
 }
