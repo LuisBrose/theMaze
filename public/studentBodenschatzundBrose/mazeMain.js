@@ -178,6 +178,7 @@ function displayItem(item){
 }
 
 function getIconByName(name){
+    if(name.includes("Schlüssel"))name = "Schlüssel";
     switch (name){
         case "Ring":
             return "icons/ring_gold-rot.png";
